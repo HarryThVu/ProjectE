@@ -43,7 +43,7 @@ public class Unit {
     private int xLoc;
     private int yLoc;
 
-    public Unit(int id, int initRank){
+    public Unit(int id, int initRank) {
         ownerID = id;
         rank = initRank;
         isSelected = false;

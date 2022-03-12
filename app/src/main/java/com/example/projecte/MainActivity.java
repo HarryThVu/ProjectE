@@ -19,8 +19,7 @@ import android.widget.TextView;
  * @version 3/11/2022
  */
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
 
     /**
      * This is basically the main method that the tester button and the info needed for running the test.
@@ -32,8 +31,7 @@ public class MainActivity extends AppCompatActivity
      */
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -44,8 +42,7 @@ public class MainActivity extends AppCompatActivity
         testerBut.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 //Clears textView of all previous string/text and creates the printString variable.
                 //The printString variable will be used to save all the test results and later be appended
                 //onto the textView.
@@ -72,12 +69,10 @@ public class MainActivity extends AppCompatActivity
                 StrategoGameState secondCopy = new StrategoGameState(secondInstance);
 
                 //It will compare the two deep copies and see if they are the same as each other.
-                if(firstCopy.toString().equals(secondInstance))
-                {
+                if(firstCopy.toString().equals(secondInstance)) {
                     printString += "\n The 2 deep copies are identical.";
                 }
-                else
-                {
+                else {
                     printString += "\n The 2 deep copies are not identical.";
                 }
 
