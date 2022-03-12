@@ -193,8 +193,11 @@ public class StrategoGameState {
                     chosen.setyLoc(chosenY - 1);
                     gameboard[chosenX][chosenY] = chosen;
                     legal = true;
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                        chosen + " forward.";
                 } else if (gameboard[chosenX][chosenY - 1].getRank() == Unit.WATER) {
                     legal = false;
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
                 } else if (gameboard[chosenX][chosenY].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX][chosenY].getRank();
@@ -202,14 +205,18 @@ public class StrategoGameState {
                         chosen.setStatus(false);
                         gameboard[chosenX][chosenY] = null;
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " + chosen + ".";
                     } else {
                         gameboard[chosenX][chosenY].setStatus(false);
                         gameboard[chosenX][chosenY] = null;
                         chosen.setxLoc(chosenY - 1);
                         gameboard[chosenX][chosenY] = chosen;
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID +
+                                " has triumphed in a battle with their " + chosen + ".";
                     }
                 } else {
+                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
                     legal = false;
                 }
                 break;
@@ -220,8 +227,11 @@ public class StrategoGameState {
                     chosen.setyLoc(chosenY + 1);  //move into space
                     gameboard[chosenX][chosenY] = chosen;
                     legal = true;
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                            chosen + " down.";
                 } else if (gameboard[chosenX][chosenY + 1].getRank() == Unit.WATER) {
                     legal = false;  //can't walk on water
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
                 } else if (gameboard[chosenX][chosenY + 1].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX][chosenY + 1].getRank();
@@ -229,14 +239,19 @@ public class StrategoGameState {
                         chosen.setStatus(false);  //you died
                         gameboard[chosenX][chosenY] = null;  //empty space you were just in
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " +
+                                chosen + ".";
                     } else {
                         gameboard[chosenX][chosenY + 1].setStatus(false);  //they died
                         gameboard[chosenX][chosenY] = null;  //empty the space you were just in
                         chosen.setyLoc(chosenY + 1);  //move into opponent's space
                         gameboard[chosenX][chosenY + 1] = chosen;  //report location to array
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID +
+                                " has triumphed in a battle with their " + chosen + ".";
                     }
                 } else {
+                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
                     legal = false;
                 }
                 break;
@@ -247,8 +262,11 @@ public class StrategoGameState {
                     chosen.setxLoc(chosenX - 1);
                     gameboard[chosenX - 1][chosenY] = chosen;
                     legal = true;
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                            chosen + " left.";
                 } else if (gameboard[chosenX - 1][chosenY].getRank() == Unit.WATER) {
                     legal = false;
+                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
                 } else if (gameboard[chosenX - 1][chosenY].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX - 1][chosenY].getRank();
@@ -257,14 +275,19 @@ public class StrategoGameState {
                         chosen.setStatus(false);  //you died
                         gameboard[chosenX][chosenY] = null;
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
+                                + chosen + ".";
                     } else {
                         gameboard[chosenX - 1][chosenY].setStatus(false);  //they died
                         gameboard[chosenX][chosenY] = null;  //empty your spot
                         chosen.setxLoc(chosenX - 1);
                         gameboard[chosenX - 1][chosenY] = chosen;  //take their spot
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID +
+                                " has triumphed in a battle with their " + chosen + ".";
                     }
                 } else {
+                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
                     legal = false;
                 }
                 break;
@@ -276,8 +299,11 @@ public class StrategoGameState {
                         chosen.setxLoc(chosenX + 1);
                         gameboard[chosenX + 1][chosenY] = chosen;
                         legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                                chosen + " right.";
                     } else if (gameboard[chosenX + 1][chosenY].getRank() == Unit.WATER) {
                         legal = false;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
                     } else {
                         if (gameboard[chosenX + 1][chosenY].getOwnerID() != playerID) {
                             //attack
@@ -286,6 +312,8 @@ public class StrategoGameState {
                             if (opponentRank > chosen.getRank()) {
                                 chosen.setStatus(false);  //you died
                                 gameboard[chosenX][chosenY] = null;
+                                whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
+                                        + chosen + ".";
                                 legal = true;
                             } else if (opponentRank <= chosen.getRank()) {
                                 gameboard[chosenX + 1][chosenY].setStatus(false);  //they died
@@ -293,10 +321,14 @@ public class StrategoGameState {
                                 chosen.setxLoc(chosenX + 1);
                                 gameboard[chosenX + 1][chosenY] = chosen;  //take theirs
                                 legal = true;
+                                whatsUp = whatsUp + "\nPlayer " + playerID +
+                                        " has triumphed in a battle with their " + chosen + ".";
                             } else {
+                                whatsUp = whatsUp + "\nWhat happened to your opponent?";
                                 legal = false;
                             }
                         } else {
+                            whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
                             legal = false;
                         }
 
@@ -349,6 +381,7 @@ public class StrategoGameState {
             case 0:
                 for(int i= 0; i <= p1Troops.size(); i++) {
                     p1Troops.get(i).setSelected(false);
+                    whatsUp = whatsUp + "\nPlayer " + playerId + " has cleared their choice.";
                 }
                 break;
             case 1:
