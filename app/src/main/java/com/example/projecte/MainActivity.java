@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
                 printString += "\n " + firstCopy.toString();
                 printString += "\n " + secondCopy.toString();
 
-                //The printString will be set onto the textViewed and displayed for the user.
+                //The printString will be set onto the textView and displayed for the user.
                 testString.setText(printString);
             }
         });
