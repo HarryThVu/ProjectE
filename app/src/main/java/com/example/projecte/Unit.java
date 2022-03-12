@@ -5,7 +5,8 @@ package com.example.projecte;
  *
  * @author Anne Marie Blank,
  * @author Harry Vu,
- * @author Vincent Truong
+ * @author Vincent Truong,
+ * @author Kathryn Weidman
  * @version 2/24/2022
  */
 public class Unit {

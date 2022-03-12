@@ -25,6 +25,7 @@ public class StrategoGameState {
     private double timeElapsed;  //for the timer
     private ArrayList<Unit> p1Troops;
     private ArrayList<Unit> p2Troops;
+    public String whatsUp = null;
 
     private boolean flagCaptured;
     private boolean legal;
@@ -321,13 +322,16 @@ public class StrategoGameState {
      * @param playerID   the id of the player attempting to choose
      * @param chosenP    the Unit being selected
      */
-    public boolean selectPiece(int playerID, Unit chosenP){
-        if(chosenP.getOwnerID() == playerID){
+    public boolean selectPiece(int playerID, Unit chosenP) {
+        if (chosenP.getOwnerID() == playerID){
             clearSelection(playerID);  //sets all Units to false
             chosenP.setSelected(true); //sets selection to true
+            whatsUp = whatsUp + "\nPlayer " + playerID + " selected their " + chosenP + ".";
             return true;
         }
         else {
+            whatsUp = whatsUp + "\nPlayer " + playerID + " has failed to select opponent's "
+                    + chosenP + ".";
             return false;
         }
     }//selectPiece
@@ -340,15 +344,15 @@ public class StrategoGameState {
      *
      * @param playerId  the ID of the user attempting to make a selection
      */
-    public void clearSelection(int playerId){
+    public void clearSelection(int playerId) {
         switch (playerId) {
             case 0:
-                for(int i= 0; i <= p1Troops.size(); i++){
+                for(int i= 0; i <= p1Troops.size(); i++) {
                     p1Troops.get(i).setSelected(false);
                 }
                 break;
             case 1:
-                for(int i= 0; i <= p2Troops.size(); i++){
+                for(int i= 0; i <= p2Troops.size(); i++) {
                     p2Troops.get(i).setSelected(false);
                 }
                 break;
@@ -397,11 +401,11 @@ public class StrategoGameState {
      * @param index the index you want to access
      * @return      the unit at the given index in the player's "hand"
      */
-    public Unit getUnit(int id, int index){
-        if(id == 0){
+    public Unit getUnit(int id, int index) {
+        if (id == 0){
             return p1Troops.get(index);
         }
-        else{
+        else {
             return p2Troops.get(index);
         }
     }//getUnit
