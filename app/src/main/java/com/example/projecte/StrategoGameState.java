@@ -381,7 +381,6 @@ public class StrategoGameState {
             case 0:
                 for(int i= 0; i <= p1Troops.size(); i++) {
                     p1Troops.get(i).setSelected(false);
-                    whatsUp = whatsUp + "\nPlayer " + playerId + " has cleared their choice.";
                 }
                 break;
             case 1:
@@ -390,6 +389,7 @@ public class StrategoGameState {
                 }
                 break;
         }
+        whatsUp = whatsUp + "\nPlayer " + playerId + " has cleared their choice.";
     }//clearSelection
 
     /**
@@ -410,19 +410,23 @@ public class StrategoGameState {
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
                 return true;
             }
             else if (playerID == 1 && y > 5) {
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
                 return true;
             }
             else {
+                whatsUp = whatsUp + "\nCan't place pieces in enemy territory.";
                 return false;
             }
         }
         else {
+            whatsUp = whatsUp + "\nPlayer " + playerID + " did... something wrong.";
             return false;
         }
     }//placePiece
