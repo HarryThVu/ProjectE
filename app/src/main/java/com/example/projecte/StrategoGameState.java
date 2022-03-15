@@ -408,7 +408,7 @@ public class StrategoGameState {
      * @return          true if alive and movement is valid, false if not
      */
     public boolean placePiece(int playerID, Unit unit, int x, int y) {
-        if (unit.getStatus()) {
+        if (!unit.getStatus()) {
             if (playerID == 0 && y < 4) {  //< 4 is for boundary purposes, ensures piece is on your side
                 unit.setxLoc(x);
                 unit.setxLoc(y);
