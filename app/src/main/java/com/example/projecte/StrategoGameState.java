@@ -162,8 +162,8 @@ public class StrategoGameState {
      */
     @Override
     public String toString() {
-        return "Turn:" + whoseTurn + "Player 1 Troops: " + p1Troops
-                + "Player 2 Troops: " + p2Troops + "Time Elapsed: " + timeElapsed
+        return "Turn:" + whoseTurn + "Player 1 Troops: " + p1Troops.size()
+                + "Player 2 Troops: " + p2Troops.size() + "Time Elapsed: " + timeElapsed
                 + "Flag Captured?: " + flagCaptured;
     }//toString
 
@@ -199,14 +199,14 @@ public class StrategoGameState {
                 } else if (chosenY - 1 >= 0 && gameboard[chosenX][chosenY - 1].getRank() == Unit.WATER) {
                     legal = false;
                     whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX][chosenY].getOwnerID() != playerID) {
+                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX][chosenY].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX][chosenY].getRank();
                     if (opponentRank > chosen.getRank()) {
                         chosen.setStatus(false);
                         gameboard[chosenX][chosenY] = null;
                         legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " + chosen + ".";
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " + chosen.nameRank() + ".";
                     } else {
                         gameboard[chosenX][chosenY].setStatus(false);
                         gameboard[chosenX][chosenY] = null;
@@ -214,10 +214,10 @@ public class StrategoGameState {
                         gameboard[chosenX][chosenY] = chosen;
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen + ".";
+                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
                     }
                 } else {
-                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                    whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
                     legal = false;
                 }
                 break;
@@ -233,7 +233,7 @@ public class StrategoGameState {
                 } else if (gameboard[chosenX][chosenY + 1].getRank() == Unit.WATER) {
                     legal = false;  //can't walk on water
                     whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX][chosenY + 1].getOwnerID() != playerID) {
+                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX][chosenY + 1].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX][chosenY + 1].getRank();
                     if (opponentRank > chosen.getRank()) {
@@ -241,7 +241,7 @@ public class StrategoGameState {
                         gameboard[chosenX][chosenY] = null;  //empty space you were just in
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " +
-                                chosen + ".";
+                                chosen.nameRank() + ".";
                     } else {
                         gameboard[chosenX][chosenY + 1].setStatus(false);  //they died
                         gameboard[chosenX][chosenY] = null;  //empty the space you were just in
@@ -249,7 +249,7 @@ public class StrategoGameState {
                         gameboard[chosenX][chosenY + 1] = chosen;  //report location to array
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen + ".";
+                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
                     }
                 } else {
                     whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
@@ -268,7 +268,7 @@ public class StrategoGameState {
                 } else if (gameboard[chosenX - 1][chosenY].getRank() == Unit.WATER) {
                     legal = false;
                     whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX - 1][chosenY].getOwnerID() != playerID) {
+                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX - 1][chosenY].getOwnerID() != playerID) {
                     //attack
                     int opponentRank = gameboard[chosenX - 1][chosenY].getRank();
 
@@ -277,7 +277,7 @@ public class StrategoGameState {
                         gameboard[chosenX][chosenY] = null;
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
-                                + chosen + ".";
+                                + chosen.nameRank() + ".";
                     } else {
                         gameboard[chosenX - 1][chosenY].setStatus(false);  //they died
                         gameboard[chosenX][chosenY] = null;  //empty your spot
@@ -285,10 +285,10 @@ public class StrategoGameState {
                         gameboard[chosenX - 1][chosenY] = chosen;  //take their spot
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen + ".";
+                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
                     }
                 } else {
-                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                    whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
                     legal = false;
                 }
                 break;
@@ -301,12 +301,12 @@ public class StrategoGameState {
                         gameboard[chosenX + 1][chosenY] = chosen;
                         legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
-                                chosen + " right.";
+                                chosen.nameRank() + " right.";
                     } else if (gameboard[chosenX + 1][chosenY].getRank() == Unit.WATER) {
                         legal = false;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
                     } else {
-                        if (gameboard[chosenX + 1][chosenY].getOwnerID() != playerID) {
+                        if (gameboard[chosenX][chosenY] != null && gameboard[chosenX + 1][chosenY].getOwnerID() != playerID) {
                             //attack
                             int opponentRank = gameboard[chosenX + 1][chosenY].getRank();
 
@@ -314,7 +314,7 @@ public class StrategoGameState {
                                 chosen.setStatus(false);  //you died
                                 gameboard[chosenX][chosenY] = null;
                                 whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
-                                        + chosen + ".";
+                                        + chosen.nameRank() + ".";
                                 legal = true;
                             } else if (opponentRank <= chosen.getRank()) {
                                 gameboard[chosenX + 1][chosenY].setStatus(false);  //they died
@@ -323,13 +323,13 @@ public class StrategoGameState {
                                 gameboard[chosenX + 1][chosenY] = chosen;  //take theirs
                                 legal = true;
                                 whatsUp = whatsUp + "\nPlayer " + playerID +
-                                        " has triumphed in a battle with their " + chosen + ".";
+                                        " has triumphed in a battle with their " + chosen.nameRank() + ".";
                             } else {
                                 whatsUp = whatsUp + "\nWhat happened to your opponent?";
                                 legal = false;
                             }
                         } else {
-                            whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                            whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
                             legal = false;
                         }
 
@@ -359,12 +359,12 @@ public class StrategoGameState {
         if (chosenP.getOwnerID() == playerID){
             clearSelection(playerID);  //sets all Units to false
             chosenP.setSelected(true); //sets selection to true
-            whatsUp = whatsUp + "\nPlayer " + playerID + " selected their " + chosenP + ".";
+            whatsUp = whatsUp + "\nPlayer " + playerID + " selected their " + chosenP.nameRank() + ".";
             return true;
         }
         else {
             whatsUp = whatsUp + "\nPlayer " + playerID + " has failed to select opponent's "
-                    + chosenP + ".";
+                    + chosenP.nameRank() + ".";
             return false;
         }
     }//selectPiece
@@ -411,14 +411,14 @@ public class StrategoGameState {
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
-                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit.nameRank() + ".";
                 return true;
             }
             else if (playerID == 1 && y > 5) {
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
-                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit.nameRank() + ".";
                 return true;
             }
             else {
