@@ -165,7 +165,7 @@ public class StrategoGameState {
         return "Turn:" + whoseTurn + "Player 1 Troops: " + p1Troops.size()
                 + "Player 2 Troops: " + p2Troops.size() + "Time Elapsed: " + timeElapsed
                 + "Flag Captured?: " + flagCaptured;
-    }//toString
+    }//toString/
 
     /**
      * movePiece
