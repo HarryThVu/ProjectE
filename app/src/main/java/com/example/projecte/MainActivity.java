@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 StrategoGameState secondCopy = new StrategoGameState(secondInstance);
 
                 //It will compare the two deep copies and see if they are the same as each other.
-                if(firstCopy.toString().equals(secondInstance)) {
+                if(firstCopy.getTurn() == secondCopy.getTurn()) {
                     printString += "\n The 2 deep copies are identical.";
                 }
                 else {

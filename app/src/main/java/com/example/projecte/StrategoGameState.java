@@ -25,7 +25,7 @@ public class StrategoGameState {
     private double timeElapsed;  //for the timer
     private ArrayList<Unit> p1Troops = new ArrayList<>();
     private ArrayList<Unit> p2Troops = new ArrayList<>();
-    public String whatsUp = null;
+    public String whatsUp = "";
 
     private boolean flagCaptured;
     private boolean legal;
@@ -56,7 +56,6 @@ public class StrategoGameState {
      */
     public void fillRanks(int pID) {
         if (pID == 0) {
-
             p1Troops.add(new Unit(0, Unit.MARSHAL));
             p1Troops.add(new Unit(0, Unit.GENERAL));
             p1Troops.add(new Unit(0, Unit.FLAG));
@@ -69,31 +68,34 @@ public class StrategoGameState {
             p1Troops.add(new Unit(0, Unit.MAJOR));
             p1Troops.add(new Unit(0, Unit.MAJOR));
 
-            for(int i = 0; i < 3; i++){
-                p1Troops.add(new Unit(0, Unit.SERGEANT));
-            }
+            p1Troops.add(new Unit(0, Unit.SERGEANT));
+            p1Troops.add(new Unit(0, Unit.SERGEANT));
+            p1Troops.add(new Unit(0, Unit.SERGEANT));
+            p1Troops.add(new Unit(0, Unit.SERGEANT));
 
-            for(int i = 0; i < 3; i++){
-                p1Troops.add(new Unit(0, Unit.LIEUTENANT));
-            }
+            p1Troops.add(new Unit(0, Unit.LIEUTENANT));
+            p1Troops.add(new Unit(0, Unit.LIEUTENANT));
+            p1Troops.add(new Unit(0, Unit.LIEUTENANT));
+            p1Troops.add(new Unit(0, Unit.LIEUTENANT));
 
-            for(int i = 0; i < 3; i++){
-                p1Troops.add(new Unit(0, Unit.CAPTAIN));
-            }
+            p1Troops.add(new Unit(0, Unit.CAPTAIN));
+            p1Troops.add(new Unit(0, Unit.CAPTAIN));
+            p1Troops.add(new Unit(0, Unit.CAPTAIN));
+            p1Troops.add(new Unit(0, Unit.CAPTAIN));
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 p1Troops.add(new Unit(0, Unit.MINER));
             }
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 8; i++) {
                 p1Troops.add(new Unit(0, Unit.SCOUT));
             }
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 p1Troops.add(new Unit(0, Unit.BOMB));
             }
-
-        } else if (pID == 1) {
+        } else if (pID == 1)
+        {
             p2Troops.add(new Unit(1, Unit.MARSHAL));
             p2Troops.add(new Unit(1, Unit.GENERAL));
             p2Troops.add(new Unit(1, Unit.FLAG));
@@ -121,15 +123,15 @@ public class StrategoGameState {
             p2Troops.add(new Unit(1, Unit.CAPTAIN));
             p2Troops.add(new Unit(1, Unit.CAPTAIN));
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 p2Troops.add(new Unit(1, Unit.MINER));
             }
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 8; i++) {
                 p2Troops.add(new Unit(1, Unit.SCOUT));
             }
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 p2Troops.add(new Unit(1, Unit.BOMB));
             }
         }
@@ -447,6 +449,18 @@ public class StrategoGameState {
             return p2Troops.get(index);
         }
     }//getUnit
+
+    /**
+     * getTurn
+     *
+     *
+     * @return      return the round number
+     */
+
+    public int getTurn()
+    {
+        return this.roundNumber;
+    }
 
 }//StrategoGameState
 
