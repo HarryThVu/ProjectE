@@ -55,14 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
                 //Where the StrategoGameState methods will be tested and where the test results will
                 //be append to the printString.
-                firstInstance.placePiece(0, firstInstance.getUnit(0,1), 0,0);
-                printString += "\n Player 1 has placed unit at position (0,0) on the board.";
+                firstInstance.placePiece(0, firstInstance.getUnit(0,1), 1,1);
                 firstInstance.selectPiece(0,firstInstance.getUnit(0,1) );
-                printString += "\n Player 1 has selected a unit.";
                 firstInstance.clearSelection(0);
-                printString += "\n Player 1 no longer has a unit selected.";
                 firstInstance.movePiece(0,firstInstance.getUnit(0,1),1);
-                printString += "\n Player 1 has move a unit up.";
+                printString += firstInstance.whatsUp;
 
                 //Creates the secondInstance and it's deep copy.
                 StrategoGameState secondInstance = new StrategoGameState();
