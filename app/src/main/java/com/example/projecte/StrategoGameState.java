@@ -462,5 +462,5 @@ public class StrategoGameState {
         return this.roundNumber;
     }
 
-}//StrategoGameState
+}//StrategoGameState.
 
