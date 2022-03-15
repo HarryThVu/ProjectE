@@ -25,7 +25,7 @@ public class StrategoGameState {
     private double timeElapsed;  //for the timer
     private ArrayList<Unit> p1Troops = new ArrayList<>();
     private ArrayList<Unit> p2Troops = new ArrayList<>();
-    public String whatsUp = null;
+    public String whatsUp = "";
 
     private boolean flagCaptured;
     private boolean legal;
@@ -73,7 +73,7 @@ public class StrategoGameState {
                 p1Troops.add(new Unit(0, Unit.SERGEANT));
             }
 
-            for(int i = 0; i < 3; i++){
+            for(int i = 0; i < 5; i++){
                 p1Troops.add(new Unit(0, Unit.LIEUTENANT));
             }
 
@@ -81,7 +81,7 @@ public class StrategoGameState {
                 p1Troops.add(new Unit(0, Unit.CAPTAIN));
             }
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 6; i++) {
                 p1Troops.add(new Unit(0, Unit.MINER));
             }
 
@@ -89,7 +89,7 @@ public class StrategoGameState {
                 p1Troops.add(new Unit(0, Unit.SCOUT));
             }
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
                 p1Troops.add(new Unit(0, Unit.BOMB));
             }
 
@@ -121,7 +121,7 @@ public class StrategoGameState {
             p2Troops.add(new Unit(1, Unit.CAPTAIN));
             p2Troops.add(new Unit(1, Unit.CAPTAIN));
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 p2Troops.add(new Unit(1, Unit.MINER));
             }
 
@@ -129,7 +129,7 @@ public class StrategoGameState {
                 p2Troops.add(new Unit(1, Unit.SCOUT));
             }
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
                 p2Troops.add(new Unit(1, Unit.BOMB));
             }
         }
@@ -162,9 +162,9 @@ public class StrategoGameState {
      */
     @Override
     public String toString() {
-        return "Turn:" + whoseTurn + "Player 1 Troops: " + p1Troops.size()
-                + "Player 2 Troops: " + p2Troops.size() + "Time Elapsed: " + timeElapsed
-                + "Flag Captured?: " + flagCaptured;
+        return " Turn: " + whoseTurn + " | Player 1 Troops: " + p1Troops.size()
+                + " | Player 2 Troops: " + p2Troops.size() + " | Time Elapsed: " + timeElapsed
+                + " | Flag Captured?: " + flagCaptured;
     }//toString/
 
     /**
@@ -187,164 +187,169 @@ public class StrategoGameState {
         int chosenY = chosen.getyLoc();
         int chosenX = chosen.getxLoc();
 
-        //1 = up, 2 = down, 3 = left, 4 = right
-        switch(dir) {
-            case 1:  //aka "up"
-                if (chosenY - 1 >= 0 && gameboard[chosenX][chosenY - 1] == null) {
-                    chosen.setyLoc(chosenY - 1);
-                    gameboard[chosenX][chosenY] = chosen;
-                    legal = true;
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
-                        chosen + " forward.";
-                } else if (chosenY - 1 >= 0 && gameboard[chosenX][chosenY - 1].getRank() == Unit.WATER) {
-                    legal = false;
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX][chosenY].getOwnerID() != playerID) {
-                    //attack
-                    int opponentRank = gameboard[chosenX][chosenY].getRank();
-                    if (opponentRank > chosen.getRank()) {
-                        chosen.setStatus(false);
-                        gameboard[chosenX][chosenY] = null;
-                        legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " + chosen.nameRank() + ".";
-                    } else {
-                        gameboard[chosenX][chosenY].setStatus(false);
-                        gameboard[chosenX][chosenY] = null;
-                        chosen.setxLoc(chosenY - 1);
+        if(gameboard[chosenX][chosenY] != null) {
+            //1 = up, 2 = down, 3 = left, 4 = right
+            switch (dir) {
+                case 1:  //aka "up"
+                    if (chosenY - 1 >= 0 && gameboard[chosenX][chosenY - 1] == null) {
+                        chosen.setyLoc(chosenY - 1);
                         gameboard[chosenX][chosenY] = chosen;
                         legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
-                    }
-                } else {
-                    whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
-                    legal = false;
-                }
-                break;
-            //End case 1
-
-            case 2:  //aka "down"
-                if (chosenY + 1 <= 9 && gameboard[chosenX][chosenY + 1] == null) {  //aka space is empty
-                    chosen.setyLoc(chosenY + 1);  //move into space
-                    gameboard[chosenX][chosenY] = chosen;
-                    legal = true;
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
-                            chosen + " down.";
-                } else if (gameboard[chosenX][chosenY + 1].getRank() == Unit.WATER) {
-                    legal = false;  //can't walk on water
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX][chosenY + 1].getOwnerID() != playerID) {
-                    //attack
-                    int opponentRank = gameboard[chosenX][chosenY + 1].getRank();
-                    if (opponentRank > chosen.getRank()) {
-                        chosen.setStatus(false);  //you died
-                        gameboard[chosenX][chosenY] = null;  //empty space you were just in
-                        legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " +
-                                chosen.nameRank() + ".";
-                    } else {
-                        gameboard[chosenX][chosenY + 1].setStatus(false);  //they died
-                        gameboard[chosenX][chosenY] = null;  //empty the space you were just in
-                        chosen.setyLoc(chosenY + 1);  //move into opponent's space
-                        gameboard[chosenX][chosenY + 1] = chosen;  //report location to array
-                        legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
-                    }
-                } else {
-                    whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
-                    legal = false;
-                }
-                break;
-            //End case 2
-
-            case 3:  //aka "left"
-                if (chosenX - 1 >= 0 && gameboard[chosenX - 1][chosenY] == null) {
-                    chosen.setxLoc(chosenX - 1);
-                    gameboard[chosenX - 1][chosenY] = chosen;
-                    legal = true;
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
-                            chosen + " left.";
-                } else if (gameboard[chosenX - 1][chosenY].getRank() == Unit.WATER) {
-                    legal = false;
-                    whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
-                } else if (gameboard[chosenX][chosenY] != null && gameboard[chosenX - 1][chosenY].getOwnerID() != playerID) {
-                    //attack
-                    int opponentRank = gameboard[chosenX - 1][chosenY].getRank();
-
-                    if (opponentRank > chosen.getRank()) {
-                        chosen.setStatus(false);  //you died
-                        gameboard[chosenX][chosenY] = null;
-                        legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
-                                + chosen.nameRank() + ".";
-                    } else {
-                        gameboard[chosenX - 1][chosenY].setStatus(false);  //they died
-                        gameboard[chosenX][chosenY] = null;  //empty your spot
-                        chosen.setxLoc(chosenX - 1);
-                        gameboard[chosenX - 1][chosenY] = chosen;  //take their spot
-                        legal = true;
-                        whatsUp = whatsUp + "\nPlayer " + playerID +
-                                " has triumphed in a battle with their " + chosen.nameRank() + ".";
-                    }
-                } else {
-                    whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
-                    legal = false;
-                }
-                break;
-            //End case 3
-
-            case 4:  //aka "right"
-                if (chosenX + 1 <= 9) {
-                    if (chosenX + 1 <= 9 && gameboard[chosenX + 1][chosenY] == null) {
-                        chosen.setxLoc(chosenX + 1);
-                        gameboard[chosenX + 1][chosenY] = chosen;
-                        legal = true;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
-                                chosen.nameRank() + " right.";
-                    } else if (gameboard[chosenX + 1][chosenY].getRank() == Unit.WATER) {
+                                chosen + " forward.";
+                    } else if (chosenY - 1 >= 0 && gameboard[chosenX][chosenY - 1].getRank() == Unit.WATER) {
                         legal = false;
                         whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
+                    } else if (gameboard[chosenX][chosenY].getOwnerID() != playerID) {
+                        //attack
+                        int opponentRank = gameboard[chosenX][chosenY].getRank();
+                        if (opponentRank > chosen.getRank()) {
+                            chosen.setStatus(false);
+                            gameboard[chosenX][chosenY] = null;
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " + chosen + ".";
+                        } else {
+                            gameboard[chosenX][chosenY].setStatus(false);
+                            gameboard[chosenX][chosenY] = null;
+                            chosen.setxLoc(chosenY - 1);
+                            gameboard[chosenX][chosenY] = chosen;
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID +
+                                    " has triumphed in a battle with their " + chosen + ".";
+                        }
                     } else {
-                        if (gameboard[chosenX][chosenY] != null && gameboard[chosenX + 1][chosenY].getOwnerID() != playerID) {
-                            //attack
-                            int opponentRank = gameboard[chosenX + 1][chosenY].getRank();
+                        whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                        legal = false;
+                    }
+                    break;
+                //End case 1
 
-                            if (opponentRank > chosen.getRank()) {
-                                chosen.setStatus(false);  //you died
-                                gameboard[chosenX][chosenY] = null;
-                                whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
-                                        + chosen.nameRank() + ".";
-                                legal = true;
-                            } else if (opponentRank <= chosen.getRank()) {
-                                gameboard[chosenX + 1][chosenY].setStatus(false);  //they died
-                                gameboard[chosenX][chosenY] = null;  //empty your space
-                                chosen.setxLoc(chosenX + 1);
-                                gameboard[chosenX + 1][chosenY] = chosen;  //take theirs
-                                legal = true;
-                                whatsUp = whatsUp + "\nPlayer " + playerID +
-                                        " has triumphed in a battle with their " + chosen.nameRank() + ".";
+                case 2:  //aka "down"
+                    if (chosenY + 1 <= 9 && gameboard[chosenX][chosenY + 1] == null) {  //aka space is empty
+                        chosen.setyLoc(chosenY + 1);  //move into space
+                        gameboard[chosenX][chosenY] = chosen;
+                        legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                                chosen + " down.";
+                    } else if (gameboard[chosenX][chosenY + 1].getRank() == Unit.WATER) {
+                        legal = false;  //can't walk on water
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
+                    } else if (gameboard[chosenX][chosenY + 1].getOwnerID() != playerID) {
+                        //attack
+                        int opponentRank = gameboard[chosenX][chosenY + 1].getRank();
+                        if (opponentRank > chosen.getRank()) {
+                            chosen.setStatus(false);  //you died
+                            gameboard[chosenX][chosenY] = null;  //empty space you were just in
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their " +
+                                    chosen + ".";
+                        } else {
+                            gameboard[chosenX][chosenY + 1].setStatus(false);  //they died
+                            gameboard[chosenX][chosenY] = null;  //empty the space you were just in
+                            chosen.setyLoc(chosenY + 1);  //move into opponent's space
+                            gameboard[chosenX][chosenY + 1] = chosen;  //report location to array
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID +
+                                    " has triumphed in a battle with their " + chosen + ".";
+                        }
+                    } else {
+                        whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                        legal = false;
+                    }
+                    break;
+                //End case 2
+
+                case 3:  //aka "left"
+                    if (chosenX - 1 >= 0 && gameboard[chosenX - 1][chosenY] == null) {
+                        chosen.setxLoc(chosenX - 1);
+                        gameboard[chosenX - 1][chosenY] = chosen;
+                        legal = true;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                                chosen + " left.";
+                    } else if (gameboard[chosenX - 1][chosenY].getRank() == Unit.WATER) {
+                        legal = false;
+                        whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
+                    } else if (gameboard[chosenX - 1][chosenY].getOwnerID() != playerID) {
+                        //attack
+                        int opponentRank = gameboard[chosenX - 1][chosenY].getRank();
+
+                        if (opponentRank > chosen.getRank()) {
+                            chosen.setStatus(false);  //you died
+                            gameboard[chosenX][chosenY] = null;
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
+                                    + chosen + ".";
+                        } else {
+                            gameboard[chosenX - 1][chosenY].setStatus(false);  //they died
+                            gameboard[chosenX][chosenY] = null;  //empty your spot
+                            chosen.setxLoc(chosenX - 1);
+                            gameboard[chosenX - 1][chosenY] = chosen;  //take their spot
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID +
+                                    " has triumphed in a battle with their " + chosen + ".";
+                        }
+                    } else {
+                        whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
+                        legal = false;
+                    }
+                    break;
+                //End case 3
+
+                case 4:  //aka "right"
+                    if (chosenX + 1 <= 9) {
+                        if (chosenX + 1 <= 9 && gameboard[chosenX + 1][chosenY] == null) {
+                            chosen.setxLoc(chosenX + 1);
+                            gameboard[chosenX + 1][chosenY] = chosen;
+                            legal = true;
+                            whatsUp = whatsUp + "\nPlayer " + playerID + " has moved their " +
+                                    chosen + " right.";
+                        } else if (gameboard[chosenX + 1][chosenY].getRank() == Unit.WATER) {
+                            legal = false;
+                            whatsUp = whatsUp + "\nPlayer " + playerID + " tried to swim, but got scared.";
+                        } else {
+                            if (gameboard[chosenX + 1][chosenY].getOwnerID() != playerID) {
+                                //attack
+                                int opponentRank = gameboard[chosenX + 1][chosenY].getRank();
+
+                                if (opponentRank > chosen.getRank()) {
+                                    chosen.setStatus(false);  //you died
+                                    gameboard[chosenX][chosenY] = null;
+                                    whatsUp = whatsUp + "\nPlayer " + playerID + " has lost their "
+                                            + chosen + ".";
+                                    legal = true;
+                                } else if (opponentRank <= chosen.getRank()) {
+                                    gameboard[chosenX + 1][chosenY].setStatus(false);  //they died
+                                    gameboard[chosenX][chosenY] = null;  //empty your space
+                                    chosen.setxLoc(chosenX + 1);
+                                    gameboard[chosenX + 1][chosenY] = chosen;  //take theirs
+                                    legal = true;
+                                    whatsUp = whatsUp + "\nPlayer " + playerID +
+                                            " has triumphed in a battle with their " + chosen + ".";
+                                } else {
+                                    whatsUp = whatsUp + "\nWhat happened to your opponent?";
+                                    legal = false;
+                                }
                             } else {
-                                whatsUp = whatsUp + "\nWhat happened to your opponent?";
+                                whatsUp = whatsUp + "\nUnit " + chosen + " can't move there.";
                                 legal = false;
                             }
-                        } else {
-                            whatsUp = whatsUp + "\nUnit " + chosen.nameRank() + " can't move there.";
-                            legal = false;
+
                         }
-
                     }
-                }
-                break;
-            //End of case 4
+                    break;
+                //End of case 4
 
-            default:
-                legal = false;
-                break;
-            //End of default case
-        }//End switch-case
+                default:
+                    legal = false;
+                    break;
+                //End of default case
+            }//End switch-case
 
-        return legal;
+            return legal;
+        }
+        else {
+            return false;
+        }
     }//movePiece
 
 
@@ -359,12 +364,12 @@ public class StrategoGameState {
         if (chosenP.getOwnerID() == playerID){
             clearSelection(playerID);  //sets all Units to false
             chosenP.setSelected(true); //sets selection to true
-            whatsUp = whatsUp + "\nPlayer " + playerID + " selected their " + chosenP.nameRank() + ".";
+            whatsUp = whatsUp + "\nPlayer " + playerID + " selected their " + chosenP + ".";
             return true;
         }
         else {
             whatsUp = whatsUp + "\nPlayer " + playerID + " has failed to select opponent's "
-                    + chosenP.nameRank() + ".";
+                    + chosenP + ".";
             return false;
         }
     }//selectPiece
@@ -406,19 +411,19 @@ public class StrategoGameState {
      * @return          true if alive and movement is valid, false if not
      */
     public boolean placePiece(int playerID, Unit unit, int x, int y) {
-        if (unit.getStatus()) {
+        if (!unit.getStatus()) {
             if (playerID == 0 && y < 4) {  //< 4 is for boundary purposes, ensures piece is on your side
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
-                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit.nameRank() + ".";
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
                 return true;
             }
             else if (playerID == 1 && y > 5) {
                 unit.setxLoc(x);
                 unit.setxLoc(y);
                 gameboard[x][y] = unit;
-                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit.nameRank() + ".";
+                whatsUp = whatsUp + "\nPlayer " + playerID + " has placed their " + unit + ".";
                 return true;
             }
             else {

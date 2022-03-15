@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 firstInstance.placePiece(0, firstInstance.getUnit(0,1), 1,1);
                 firstInstance.selectPiece(0,firstInstance.getUnit(0,1) );
                 firstInstance.clearSelection(0);
+                firstInstance.selectPiece(0,firstInstance.getUnit(0,1) ); //??
                 firstInstance.movePiece(0,firstInstance.getUnit(0,1),1);
                 printString += firstInstance.whatsUp;
 
