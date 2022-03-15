@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * This is basically the main method that the tester button and the info needed for running the test.
      *
-     * @param savedInstanceState   Reqired for this to class to extend AppCompatActivity.
+     * @param savedInstanceState   Required for this to class to extend AppCompatActivity.
      *
      * @return void                Doesn't return anything.
      *
